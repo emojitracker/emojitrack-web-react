@@ -1,0 +1,38 @@
+version: '2'
+services:
+
+  rest-api:
+    image: emojitracker/rest-api
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - RACK_ENV=development
+      - REDIS_URL=redis://redis:6379
+      - MEMCACHIER_SERVERS=memcache
+    depends_on:
+      - memcache
+      - redis
+
+  stream-api:
+    image: emojitracker/gostreamer
+    environment:
+      - PORT=9000
+      - GO_ENV=development
+      - REDIS_URL=redis://redis:6379
+    ports:
+      - "9000:9000"
+    depends_on:
+      - redis
+
+  redis:
+    image: redis
+
+  memcache:
+    image: memcached:alpine
+
+  feeder:
+    image: emojitracker/fakefeeder
+    command: ["-target=redis://redis:6379", "-rate=250"]
+    depends_on:
+      - redis
