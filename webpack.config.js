@@ -1,5 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const isProd = (process.env.NODE_ENV === 'production');
 
@@ -16,6 +17,12 @@ function getPlugins() {
         new webpack.EnvironmentPlugin(["NODE_ENV", "REST_API", "STREAM_API"])
     );
 
+    // Copy our HTML file to dist
+    plugins.push(
+        new CopyWebpackPlugin([
+            { from: 'static/index.html' }
+        ])
+    );
     
     // Conditionally add plugins for Production builds.
     if (isProd) {
