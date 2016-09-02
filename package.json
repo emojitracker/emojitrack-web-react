@@ -1,0 +1,27 @@
+{
+  "name": "emojitrack-web-react",
+  "version": "0.0.1",
+  "description": "emojitracker web frontend",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack-dev-server --hot --inline --content-base ./static",
+    "webpack": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matthew Rothenberg <mroth@mroth.info>",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "babel-core": "^6.14.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-react": "^6.11.1",
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.15.1"
+  },
+  "dependencies": {
+    "react": "^15.3.1",
+    "react-dom": "^15.3.1",
+    "whatwg-fetch": "^1.0.0"
+  }
+}
