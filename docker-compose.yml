@@ -1,5 +1,9 @@
 version: '2'
 services:
+  # web:
+  #   environment:
+  #     - REST_API=http://rest-api:8000/api/v1/
+  #     - STREAM_API=http://stream-api:9000/
 
   rest-api:
     image: emojitracker/rest-api

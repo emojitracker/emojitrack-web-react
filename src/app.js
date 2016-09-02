@@ -1,8 +1,8 @@
 import React from "react"
 import ReactDOM from "react-dom"
 
-// const REST_API_URI = "http://emojitracker.com/api";
-const REST_API_URI = "http://localhost:8000/api/v1"
+const REST_API   = process.env.REST_API   || "http://emojitracker.com/api"; // TODO: migrate to prod v1
+const STREAM_API = process.env.STREAM_API || "http://stream.emojitracker.com";
 
 var EmojiMatrix = React.createClass({
     getInitialState: function() {
@@ -49,5 +49,5 @@ var MatrixEntry = React.createClass({
 });
 
 ReactDOM.render(
-    <EmojiMatrix source={REST_API_URI + "/rankings"} />, root
+    <EmojiMatrix source={REST_API + "/rankings"} />, root
 );

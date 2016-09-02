@@ -4,15 +4,16 @@ var webpack = require('webpack');
 const isProd = (process.env.NODE_ENV === 'production');
 
 function getPlugins() {
-    // using some tips from here: http://jonnyreeves.co.uk/2016/simple-webpack-prod-and-dev-config/
-    // but modified... (e.g. wtf why not just use EnvironmentPlugin?)
     var plugins = [];
 
     // Always expose NODE_ENV to webpack, you can now use `process.env.NODE_ENV`
     // inside your code for any environment checks; UglifyJS will automatically
     // drop any unreachable code.
+    // (c.f. http://jonnyreeves.co.uk/2016/simple-webpack-prod-and-dev-config/)
+    //
+    // Also expose REST_API and STREAM_API so we can swap that around at run time.
     plugins.push(
-        new webpack.EnvironmentPlugin(["NODE_ENV"])
+        new webpack.EnvironmentPlugin(["NODE_ENV", "REST_API", "STREAM_API"])
     );
 
     
