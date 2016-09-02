@@ -1,6 +1,9 @@
 import React from "react"
 import ReactDOM from "react-dom"
 
+// const REST_API_URI = "http://emojitracker.com/api";
+const REST_API_URI = "http://localhost:8000/api/v1"
+
 var EmojiMatrix = React.createClass({
     getInitialState: function() {
         return { data: [] };
@@ -46,5 +49,5 @@ var MatrixEntry = React.createClass({
 });
 
 ReactDOM.render(
-    <EmojiMatrix source="http://emojitracker.com/api/rankings" />, root
+    <EmojiMatrix source={REST_API_URI + "/rankings"} />, root
 );
