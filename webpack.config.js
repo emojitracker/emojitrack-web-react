@@ -6,7 +6,7 @@ const isProduction = (process.env.NODE_ENV === 'production');
 module.exports = {
     entry: ['whatwg-fetch', './src/app.js'],
     output: {
-        path: './bin',
+        path: './dist',
         filename: 'bundle.js',
         publicPath: '/'
     },
