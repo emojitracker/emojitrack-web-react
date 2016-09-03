@@ -19,6 +19,8 @@
     "babel-preset-react-hmre": "^1.1.1",
     "copy-webpack-plugin": "^3.0.1",
     "cross-env": "^2.0.1",
+    "css-loader": "^0.24.0",
+    "style-loader": "^0.13.1",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.15.1"
   },

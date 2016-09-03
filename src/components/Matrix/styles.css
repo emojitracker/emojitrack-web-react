@@ -1,0 +1,9 @@
+#emojiMatrix li {
+    width: 110px;
+    height: 20px;
+    background-color: #eee;
+    list-style-type: none;
+    padding: 3px;
+    margin: 1px;
+    float: left;
+}

@@ -55,14 +55,17 @@ module.exports = {
     plugins: getPlugins(),
     
     module: {
-        loaders: [{
-            test: /.jsx?$/,
-            exclude: /node_modules/,
-            loader: 'babel-loader',
-            query: {
-                presets: isProd ? ['es2015', 'react'] : ['es2015', 'react', 'react-hmre']
+        loaders: [
+            { test: /\.css$/, loader: "style-loader!css-loader" },
+            {
+                test: /.jsx?$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader',
+                query: {
+                    presets: isProd ? ['es2015', 'react'] : ['es2015', 'react', 'react-hmre']
+                }
             }
-        }]
+        ]
     }
 
 }
