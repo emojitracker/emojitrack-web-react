@@ -20,7 +20,8 @@ function getPlugins() {
     // Copy our HTML file to dist
     plugins.push(
         new CopyWebpackPlugin([
-            { from: 'static/index.html' }
+            { from: 'static/index.html' },
+            { from: 'static/CNAME' }
         ])
     );
     
