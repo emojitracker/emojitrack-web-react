@@ -35,14 +35,14 @@ class EmojiMatrix extends React.Component {
 class MatrixEntry extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { data: [] };
+        this.state = {score: props.initialScore};
     }
     
     render() {
         return (
             <li title={this.props.name}>
                 <span className="char">{this.props.char}</span>
-                <span className="score">{this.props.initialScore}</span>
+                <span className="score">{this.state.score}</span>
             </li>
         );
     }
