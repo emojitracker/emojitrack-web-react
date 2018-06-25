@@ -1,5 +1,9 @@
+# NOTE: you probably don't need this yet! just run locally against production
+# until mroth fixes this all up, for nice offline development support. (TODO: mroth)
+
 version: '2'
 services:
+  # # eventually run the local app in a container too
   # web:
   #   environment:
   #     - REST_API=http://rest-api:8000/api/v1/
