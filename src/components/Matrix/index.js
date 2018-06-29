@@ -1,7 +1,7 @@
-import React from "react"
-import styles from "./styles.css"
+import React, { Component } from 'react';
+import "./styles.css";
 
-class EmojiMatrix extends React.Component {
+class EmojiMatrix extends Component {
     constructor(props) {
         super(props);
         this.state = { data: [] };
@@ -32,12 +32,12 @@ class EmojiMatrix extends React.Component {
     }
 };
 
-class MatrixEntry extends React.Component {
+class MatrixEntry extends Component {
     constructor(props) {
         super(props);
         this.state = {score: props.initialScore};
     }
-    
+
     render() {
         return (
             <li title={this.props.name}>
