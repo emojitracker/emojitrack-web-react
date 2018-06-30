@@ -9,4 +9,7 @@ import App from "./App";
 // import registerServiceWorker from "./registerServiceWorker";
 
 ReactDOM.render(<App />, document.getElementById("root"));
-registerServiceWorker();
+/* serviceWorker is disabled to avoid caching in production while we're still
+   working on the initial version...
+   TODO: re-enable serviceWorker when/if closer to launch. */
+// registerServiceWorker();
