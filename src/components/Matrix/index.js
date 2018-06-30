@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import "./styles.css";
 
-class EmojiMatrix extends Component {
+class EmojiMatrix extends React.Component {
     constructor(props) {
         super(props);
         this.state = { data: [] };
@@ -19,7 +19,7 @@ class EmojiMatrix extends Component {
     render() {
         var matrixEntries = this.state.data.map( entry => {
             const { id, score, char, name } = entry;
-            return <MatrixEntry key={id} initialScore={score} char={char} name={name} />
+            return <MatrixEntry key={id} score={score} char={char} name={name} />
         });
 
         return (
@@ -32,17 +32,12 @@ class EmojiMatrix extends Component {
     }
 };
 
-class MatrixEntry extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {score: props.initialScore};
-    }
-
+class MatrixEntry extends React.PureComponent {
     render() {
         return (
             <li title={this.props.name}>
                 <span className="char">{this.props.char}</span>
-                <span className="score">{this.state.score}</span>
+                <span className="score">{this.props.score}</span>
             </li>
         );
     }
