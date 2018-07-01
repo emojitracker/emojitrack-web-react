@@ -40,9 +40,7 @@ class EmojiMatrix extends React.Component {
   }
 
   startStreaming() {
-    this.scoreUpdates = new EventSource(
-      `${process.env.REACT_APP_STREAM_API}/subscribe/eps`
-    );
+    this.scoreUpdates = new EventSource(this.props.stream);
 
     this.scoreUpdates.onmessage = event => {
       const update = JSON.parse(event.data);

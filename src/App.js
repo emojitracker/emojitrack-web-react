@@ -7,7 +7,10 @@ import "./App.css";
 class App extends Component {
   render() {
     return (
-      <EmojiMatrix source={process.env.REACT_APP_REST_API + "/rankings"} />
+      <EmojiMatrix
+        source={process.env.REACT_APP_REST_API + "/rankings"}
+        stream={process.env.REACT_APP_STREAM_API + "/subscribe/eps"}
+      />
     );
   }
 }
