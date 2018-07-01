@@ -98,7 +98,7 @@ class MatrixEntry extends React.Component {
     return (
       // <li title={this.props.name} ref={this.entryListItem}>
       <li title={this.props.name}>
-        <span className="char">{this.props.char}</span>
+        <span className="char emojifont">{this.props.char}</span>
         <span className="score">{this.props.score}</span>
       </li>
     );
