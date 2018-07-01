@@ -39,23 +39,26 @@ class EmojiMatrix extends React.Component {
     this.stopStreaming();
   }
 
+  parseStreamUpdate(data) {
+    const update = JSON.parse(data);
+    this.setState((prevState, props) => {
+      /* TODO: need to profile, but I suspect this is where some of the inefficiency is,
+      since updating state without mutation involves a heck of a lot of object creation
+      and I'm guessing maybe heap allocation / gc pressure? */
+      let updatedItems = {};
+      for (const [k, v] of Object.entries(update)) {
+        updatedItems[k] = { ...prevState.matrixItems[k] };
+        updatedItems[k].score += v;
+      }
+      const mergedItems = { ...prevState.matrixItems, ...updatedItems };
+      return { matrixItems: mergedItems };
+    });
+  }
+
   startStreaming() {
     this.scoreUpdates = new EventSource(this.props.stream);
-
     this.scoreUpdates.onmessage = event => {
-      const update = JSON.parse(event.data);
-      this.setState((prevState, props) => {
-        /* TODO: need to profile, but I suspect this is where some of the inefficiency is,
-        since updating state without mutation involves a heck of a lot of object creation
-        and I'm guessing maybe heap allocation / gc pressure? */
-        let updatedItems = {};
-        for (const [k, v] of Object.entries(update)) {
-          updatedItems[k] = { ...prevState.matrixItems[k] };
-          updatedItems[k].score += v;
-        }
-        const mergedItems = { ...prevState.matrixItems, ...updatedItems };
-        return { matrixItems: mergedItems };
-      });
+      this.parseStreamUpdate(event.data);
     };
   }
 
