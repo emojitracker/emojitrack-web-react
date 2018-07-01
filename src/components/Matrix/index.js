@@ -71,7 +71,11 @@ class EmojiMatrix extends React.Component {
   }
 }
 
-class MatrixEntry extends React.PureComponent {
+class MatrixEntry extends React.Component {
+  shouldComponentUpdate(nextProps, _nextState) {
+    return this.props.score !== nextProps.score;
+  }
+
   render() {
     return (
       <li title={this.props.name}>
