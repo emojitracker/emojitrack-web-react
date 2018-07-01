@@ -82,17 +82,38 @@ class EmojiMatrix extends React.Component {
 }
 
 class MatrixEntry extends React.Component {
+  /* commented out code in this component is working animation placeholder,
+  preserving for the future but keeping off for now so we can focus on raw
+  perf before adding that whole complexity in! */
+  // constructor(props) {
+  //   super(props);
+  //   this.entryListItem = React.createRef();
+  // }
+
   shouldComponentUpdate(nextProps, _nextState) {
     return this.props.score !== nextProps.score;
   }
 
   render() {
     return (
+      // <li title={this.props.name} ref={this.entryListItem}>
       <li title={this.props.name}>
         <span className="char">{this.props.char}</span>
         <span className="score">{this.props.score}</span>
       </li>
     );
+  }
+
+  componentDidUpdate() {
+    /* old animatin method, via timeout (no longer works well in chrome) */
+    // this.entryListItem.current.classList.add("highlight-score-update");
+    // setTimeout(() =>
+    //   this.entryListItem.current.classList.remove("highlight-score-update")
+    // );
+    /* alternate animation method, manually triggering reflow */
+    // this.entryListItem.current.classList.add("highlight-score-update");
+    // void this.entryListItem.current.offsetWidth;
+    // this.entryListItem.current.classList.remove("highlight-score-update");
   }
 }
 

@@ -6,4 +6,17 @@
   padding: 3px;
   margin: 1px;
   float: left;
+
+  transition: color 0.75s linear, background-color 0.75s linear;
+  /* will-change: transform; */
+}
+
+#emojiMatrix li:hover {
+  box-shadow: inset 0 0 30px pink;
+}
+
+#emojiMatrix li.highlight-score-update {
+  color: red;
+  background-color: lightgreen;
+  transition: all 0s;
 }
