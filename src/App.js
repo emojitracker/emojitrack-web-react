@@ -9,7 +9,7 @@ class App extends Component {
     return (
       <EmojiMatrix
         source={`${process.env.REACT_APP_REST_API}/rankings`}
-        stream={`${REACT_APP_STREAM_API}/subscribe/eps`}
+        stream={`${process.env.REACT_APP_STREAM_API}/subscribe/eps`}
       />
     );
   }
