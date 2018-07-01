@@ -4,22 +4,61 @@ import "./styles.css";
 class EmojiMatrix extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: [] };
+    this.state = { scores: {} };
   }
 
   componentDidMount() {
     var req = new Request(this.props.source);
     fetch(req).then(response => {
-      response.json().then(data => {
-        this.setState({ data: data });
-      });
+      response
+        .json()
+        .then(data => {
+          let initialScores = {};
+          for (const record of data) {
+            initialScores[record.id] = {
+              id: record.id,
+              name: record.name,
+              char: record.char,
+              score: record.score
+            };
+          }
+          this.setState({ scores: initialScores });
+        })
+        .then(() => {
+          this.startStreaming();
+        });
     });
   }
 
+  componentWillUnmount() {
+    this.stopStreaming();
+  }
+
+  startStreaming() {
+    this.scoreUpdates = new EventSource(
+      `${process.env.REACT_APP_STREAM_API}/subscribe/eps`
+    );
+
+    this.scoreUpdates.onmessage = event => {
+      const update = JSON.parse(event.data);
+      let newScores = Object.assign({}, this.state.scores);
+      for (const [k, v] of Object.entries(update)) {
+        newScores[k].score += v;
+      }
+      this.setState(newScores);
+    };
+  }
+
+  stopStreaming() {
+    this.scoreUpdates.close();
+  }
+
   render() {
-    var matrixEntries = this.state.data.map(entry => {
-      const { id, score, char, name } = entry;
-      return <MatrixEntry key={id} score={score} char={char} name={name} />;
+    const matrixEntries = Object.keys(this.state.scores).map(id => {
+      const c = this.state.scores[id];
+      return (
+        <MatrixEntry key={c.id} score={c.score} char={c.char} name={c.name} />
+      );
     });
 
     return (
