@@ -4,7 +4,7 @@ import "./styles.css";
 class EmojiMatrix extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { scores: {} };
+    this.state = { matrixItemIds: [], matrixItems: {} };
   }
 
   componentDidMount() {
@@ -13,16 +13,21 @@ class EmojiMatrix extends React.Component {
       response
         .json()
         .then(data => {
-          let initialScores = {};
+          let initialMatrixItemIds = [];
+          let initialMatrixItems = {};
           for (const record of data) {
-            initialScores[record.id] = {
+            initialMatrixItemIds.push(record.id);
+            initialMatrixItems[record.id] = {
               id: record.id,
               name: record.name,
               char: record.char,
               score: record.score
             };
           }
-          this.setState({ scores: initialScores });
+          this.setState({
+            matrixItemIds: initialMatrixItemIds,
+            matrixItems: initialMatrixItems
+          });
         })
         .then(() => {
           this.startStreaming();
@@ -42,11 +47,11 @@ class EmojiMatrix extends React.Component {
     this.scoreUpdates.onmessage = event => {
       const update = JSON.parse(event.data);
       this.setState((prevState, props) => {
-        let newScores = Object.assign({}, prevState.scores);
+        let newItems = Object.assign({}, prevState.matrixItems);
         for (const [k, v] of Object.entries(update)) {
-          newScores[k].score += v;
+          newItems[k].score += v;
         }
-        return { scores: newScores };
+        return { scores: newItems };
       });
     };
   }
@@ -56,8 +61,8 @@ class EmojiMatrix extends React.Component {
   }
 
   render() {
-    const matrixEntries = Object.keys(this.state.scores).map(id => {
-      const c = this.state.scores[id];
+    const matrixEntries = this.state.matrixItemIds.map(id => {
+      const c = this.state.matrixItems[id];
       return (
         <MatrixEntry key={c.id} score={c.score} char={c.char} name={c.name} />
       );
