@@ -47,11 +47,16 @@ class EmojiMatrix extends React.Component {
     this.scoreUpdates.onmessage = event => {
       const update = JSON.parse(event.data);
       this.setState((prevState, props) => {
-        let newItems = Object.assign({}, prevState.matrixItems);
+        /* TODO: need to profile, but I suspect this is where some of the inefficiency is,
+        since updating state without mutation involves a heck of a lot of object creation
+        and I'm guessing maybe heap allocation / gc pressure? */
+        let updatedItems = {};
         for (const [k, v] of Object.entries(update)) {
-          newItems[k].score += v;
+          updatedItems[k] = { ...prevState.matrixItems[k] };
+          updatedItems[k].score += v;
         }
-        return { scores: newItems };
+        const mergedItems = { ...prevState.matrixItems, ...updatedItems };
+        return { matrixItems: mergedItems };
       });
     };
   }
