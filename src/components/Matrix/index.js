@@ -41,11 +41,13 @@ class EmojiMatrix extends React.Component {
 
     this.scoreUpdates.onmessage = event => {
       const update = JSON.parse(event.data);
-      let newScores = Object.assign({}, this.state.scores);
-      for (const [k, v] of Object.entries(update)) {
-        newScores[k].score += v;
-      }
-      this.setState(newScores);
+      this.setState((prevState, props) => {
+        let newScores = Object.assign({}, prevState.scores);
+        for (const [k, v] of Object.entries(update)) {
+          newScores[k].score += v;
+        }
+        return { scores: newScores };
+      });
     };
   }
 
