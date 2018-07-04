@@ -10,12 +10,14 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "flow": "flow",
     "pretty": "prettier --write src/**/*.{js,css}",
     "prettycheck": "prettier-check src/**/*.{js,css}",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "flow-bin": "^0.75.0",
     "prettier": "1.13.7",
     "prettier-check": "^2.0.0"
   }

@@ -1,10 +1,43 @@
+// @flow
 import React from "react";
 import "./styles.css";
 
-class EmojiMatrix extends React.Component {
-  constructor(props) {
+type Props = {
+  source: string,
+  stream: string
+};
+
+type State = {
+  matrixItemIds: Array<string>,
+  matrixItems: { [id: string]: MatrixItem }
+  // TODO: maybe replace above with a ES6 map, as they preserve order and thus can get rid of
+  // the Ids array! Yay for being forced to think about types!...
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
+  //
+  // ...but maybe not for updating state?? :(
+  // https://stackoverflow.com/questions/49532382/correct-modification-of-es6-map-through-setstate
+};
+
+type MatrixItem = {
+  id: string, // hyphenated codepoint id for emoji
+  name: string, // the textual representation name of the emoji
+  char: string, // rendered unicode string for the emoji glyph
+  score: number // current score
+};
+
+// type ScoreUpdate = {
+//   id: string,
+//   val: number
+// };
+
+class EmojiMatrix extends React.Component<Props, State> {
+  scoreUpdates: any; //EventSource;
+  // TODO: flow doesnt seem to recognize EventSource?! https://github.com/facebook/flow/issues/6493
+
+  constructor(props: Props) {
     super(props);
     this.state = { matrixItemIds: [], matrixItems: {} };
+    this.scoreUpdates = null;
   }
 
   componentDidMount() {
@@ -14,16 +47,19 @@ class EmojiMatrix extends React.Component {
         .json()
         .then(data => {
           let initialMatrixItemIds = [];
-          let initialMatrixItems = {};
+          let initialMatrixItems: { [id: string]: MatrixItem } = {};
+
           for (const record of data) {
             initialMatrixItemIds.push(record.id);
-            initialMatrixItems[record.id] = {
+            const entry: MatrixItem = {
               id: record.id,
               name: record.name,
               char: record.char,
               score: record.score
             };
+            initialMatrixItems[record.id] = entry;
           }
+
           this.setState({
             matrixItemIds: initialMatrixItemIds,
             matrixItems: initialMatrixItems
@@ -39,16 +75,19 @@ class EmojiMatrix extends React.Component {
     this.stopStreaming();
   }
 
-  parseStreamUpdate(data) {
+  parseStreamUpdate(data: any) {
     const update = JSON.parse(data);
     this.setState((prevState, props) => {
       /* TODO: need to profile, but I suspect this is where some of the inefficiency is,
       since updating state without mutation involves a heck of a lot of object creation
       and I'm guessing maybe heap allocation / gc pressure? */
-      let updatedItems = {};
+      let updatedItems: { [id: string]: MatrixItem } = {};
       for (const [k, v] of Object.entries(update)) {
-        updatedItems[k] = { ...prevState.matrixItems[k] };
-        updatedItems[k].score += v;
+        if (typeof k === "string" && typeof v === "number") {
+          // use type refinements to check at runtime
+          updatedItems[k] = { ...prevState.matrixItems[k] };
+          updatedItems[k].score += v;
+        }
       }
       const mergedItems = { ...prevState.matrixItems, ...updatedItems };
       return { matrixItems: mergedItems };
@@ -56,8 +95,9 @@ class EmojiMatrix extends React.Component {
   }
 
   startStreaming() {
+    // $FlowFixMe: f u flow, facebook never heard of eventsource?!
     this.scoreUpdates = new EventSource(this.props.stream);
-    this.scoreUpdates.onmessage = event => {
+    this.scoreUpdates.onmessage = (event: MessageEvent) => {
       this.parseStreamUpdate(event.data);
     };
   }
@@ -78,7 +118,11 @@ class EmojiMatrix extends React.Component {
   }
 }
 
-class MatrixEntry extends React.Component {
+class MatrixEntry extends React.Component<{
+  name: string,
+  char: string,
+  score: number
+}> {
   /* commented out code in this component is working animation placeholder,
   preserving for the future but keeping off for now so we can focus on raw
   perf before adding that whole complexity in! */
