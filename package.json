@@ -5,17 +5,22 @@
   "dependencies": {
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "react-scripts": "1.1.4"
+    "react-scripts-ts": "2.16.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "pretty": "prettier --write src/**/*.{js,css}",
-    "prettycheck": "prettier-check src/**/*.{js,css}",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "start": "react-scripts-ts start",
+    "build": "react-scripts-ts build",
+    "test": "react-scripts-ts test --env=jsdom",
+    "eject": "react-scripts-ts eject",
+    "pretty": "prettier --write src/**/*.{ts,tsx,js,css}",
+    "prettycheck": "prettier-check src/**/*.{ts,tsx,js,css}"
   },
   "devDependencies": {
+    "@types/jest": "^23.1.4",
+    "@types/node": "^10.5.2",
+    "@types/react": "^16.4.6",
+    "@types/react-dom": "^16.0.6",
+    "typescript": "^2.9.2",
     "prettier": "1.13.7",
     "prettier-check": "^2.0.0"
   }

@@ -1,11 +1,12 @@
-import React, { Component } from "react";
+import * as React from "react";
+
 import EmojiMatrix from "./components/Matrix";
 
-// import logo from './logo.svg';
 import "./App.css";
+// import logo from './logo.svg';
 
-class App extends Component {
-  render() {
+class App extends React.Component {
+  public render() {
     return (
       <EmojiMatrix
         source={process.env.REACT_APP_REST_API + "/rankings"}
