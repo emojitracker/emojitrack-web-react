@@ -2,6 +2,18 @@
 import React from "react";
 import "./styles.css";
 
+type MatrixItem = {
+  id: string, // hyphenated codepoint id for emoji
+  name: string, // the textual representation name of the emoji
+  char: string, // rendered unicode string for the emoji glyph
+  score: number // current score
+};
+
+// type ScoreUpdate = {
+//   id: string,
+//   val: number
+// };
+
 type Props = {
   source: string,
   stream: string
@@ -18,21 +30,8 @@ type State = {
   // https://stackoverflow.com/questions/49532382/correct-modification-of-es6-map-through-setstate
 };
 
-type MatrixItem = {
-  id: string, // hyphenated codepoint id for emoji
-  name: string, // the textual representation name of the emoji
-  char: string, // rendered unicode string for the emoji glyph
-  score: number // current score
-};
-
-// type ScoreUpdate = {
-//   id: string,
-//   val: number
-// };
-
 class EmojiMatrix extends React.Component<Props, State> {
-  scoreUpdates: any; //EventSource;
-  // TODO: flow doesnt seem to recognize EventSource?! https://github.com/facebook/flow/issues/6493
+  scoreUpdates: ?EventSource;
 
   constructor(props: Props) {
     super(props);
@@ -95,7 +94,6 @@ class EmojiMatrix extends React.Component<Props, State> {
   }
 
   startStreaming() {
-    // $FlowFixMe: f u flow, facebook never heard of eventsource?!
     this.scoreUpdates = new EventSource(this.props.stream);
     this.scoreUpdates.onmessage = (event: MessageEvent) => {
       this.parseStreamUpdate(event.data);
@@ -103,7 +101,9 @@ class EmojiMatrix extends React.Component<Props, State> {
   }
 
   stopStreaming() {
-    this.scoreUpdates.close();
+    if (this.scoreUpdates != null) {
+      this.scoreUpdates.close();
+    }
   }
 
   render() {
