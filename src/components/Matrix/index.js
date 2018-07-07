@@ -74,11 +74,7 @@ class EmojiMatrix extends React.Component {
       );
     });
 
-    return (
-      <div id="emojiMatrix">
-        <ul>{matrixEntries}</ul>
-      </div>
-    );
+    return <div id="emojiMatrix">{matrixEntries}</div>;
   }
 }
 
@@ -98,10 +94,10 @@ class MatrixEntry extends React.Component {
   render() {
     return (
       // <li title={this.props.name} ref={this.entryListItem}>
-      <li title={this.props.name}>
-        <span className="char emojifont">{this.props.char}</span>
-        <span className="score">{this.props.score}</span>
-      </li>
+      <div className="entry" title={this.props.name}>
+        <div className="char emojifont">{this.props.char}</div>
+        <div className="score">{this.props.score}</div>
+      </div>
     );
   }
 

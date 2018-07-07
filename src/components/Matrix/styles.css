@@ -1,31 +1,47 @@
-#emojiMatrix li {
+#emojiMatrix {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 1px;
+}
+
+#emojiMatrix .entry {
   width: 110px;
   height: 22px;
   background-color: #eee;
-  list-style-type: none;
   padding: 3px;
   padding-right: 10px;
   margin: 1px;
-  float: left;
+  overflow: hidden;
+  display: flex;
+
+  flex-basis: 110px;
+  flex-grow: 1;
 
   transition: color 0.75s linear, background-color 0.75s linear;
   /* will-change: transform; */
 }
 
-#emojiMatrix li > .char {
+#emojiMatrix .entry .char {
   font-size: 16px;
+  width: 16px;
+  height: 22px;
+  overflow: hidden;
 }
 
-#emojiMatrix li > .score {
+#emojiMatrix .entry .score {
   padding-left: 10px;
   font-size: 0.85em;
+  width: 92px;
+  height: 22px;
+  overflow: hidden;
 }
 
-#emojiMatrix li:hover {
+#emojiMatrix .entry:hover {
   box-shadow: inset 0 0 30px pink;
 }
 
-#emojiMatrix li.highlight-score-update {
+#emojiMatrix .entry.highlight-score-update {
   color: red;
   background-color: lightgreen;
   transition: all 0s;
