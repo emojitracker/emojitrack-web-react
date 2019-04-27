@@ -1,8 +1,28 @@
 import React from "react";
-import "./styles.css";
+import MatrixEntry from "./MatrixEntry";
+import "./Matrix.css";
 
-class EmojiMatrix extends React.Component {
-  constructor(props) {
+export interface Props {
+  source: string;
+  stream: string;
+}
+
+export interface State {
+  matrixItemIds: number[];
+  matrixItems: { [id: string]: MatrixItem };
+}
+
+export interface MatrixItem {
+  char: string;
+  id: string;
+  name: string;
+  score: number;
+}
+
+class EmojiMatrix extends React.Component<Props, State> {
+  private scoreUpdates!: EventSource; // TODO: wrap as optional instead?
+
+  constructor(props: Props) {
     super(props);
     this.state = { matrixItemIds: [], matrixItems: {} };
   }
@@ -13,14 +33,14 @@ class EmojiMatrix extends React.Component {
       response
         .json()
         .then(data => {
-          let initialMatrixItemIds = [];
-          let initialMatrixItems = {};
+          const initialMatrixItemIds: number[] = [];
+          const initialMatrixItems: { [id: string]: MatrixItem } = {};
           for (const record of data) {
             initialMatrixItemIds.push(record.id);
             initialMatrixItems[record.id] = {
+              char: record.char,
               id: record.id,
               name: record.name,
-              char: record.char,
               score: record.score
             };
           }
@@ -39,16 +59,20 @@ class EmojiMatrix extends React.Component {
     this.stopStreaming();
   }
 
-  parseStreamUpdate(data) {
+  parseStreamUpdate(data: string) {
     const update = JSON.parse(data);
-    this.setState((prevState, props) => {
+    this.setState((prevState, _props) => {
       /* TODO: need to profile, but I suspect this is where some of the inefficiency is,
       since updating state without mutation involves a heck of a lot of object creation
       and I'm guessing maybe heap allocation / gc pressure? */
-      let updatedItems = {};
+      const updatedItems: { [id: string]: MatrixItem } = {};
       for (const [k, v] of Object.entries(update)) {
-        updatedItems[k] = { ...prevState.matrixItems[k] };
-        updatedItems[k].score += v;
+        if (typeof k === "string" && typeof v === "number") {
+          updatedItems[k] = { ...prevState.matrixItems[k] };
+          updatedItems[k].score += v;
+        } else {
+          console.error(`Received an unparseable stream update: ${update}`);
+        }
       }
       const mergedItems = { ...prevState.matrixItems, ...updatedItems };
       return { matrixItems: mergedItems };
@@ -75,42 +99,6 @@ class EmojiMatrix extends React.Component {
     });
 
     return <div id="emojiMatrix">{matrixEntries}</div>;
-  }
-}
-
-class MatrixEntry extends React.Component {
-  /* commented out code in this component is working animation placeholder,
-  preserving for the future but keeping off for now so we can focus on raw
-  perf before adding that whole complexity in! */
-  // constructor(props) {
-  //   super(props);
-  //   this.entryListItem = React.createRef();
-  // }
-
-  shouldComponentUpdate(nextProps, _nextState) {
-    return this.props.score !== nextProps.score;
-  }
-
-  render() {
-    return (
-      // <li title={this.props.name} ref={this.entryListItem}>
-      <div className="entry" title={this.props.name}>
-        <div className="char emojifont">{this.props.char}</div>
-        <div className="score">{this.props.score}</div>
-      </div>
-    );
-  }
-
-  componentDidUpdate() {
-    /* old animatin method, via timeout (no longer works well in chrome) */
-    // this.entryListItem.current.classList.add("highlight-score-update");
-    // setTimeout(() =>
-    //   this.entryListItem.current.classList.remove("highlight-score-update")
-    // );
-    /* alternate animation method, manually triggering reflow */
-    // this.entryListItem.current.classList.add("highlight-score-update");
-    // void this.entryListItem.current.offsetWidth;
-    // this.entryListItem.current.classList.remove("highlight-score-update");
   }
 }
 

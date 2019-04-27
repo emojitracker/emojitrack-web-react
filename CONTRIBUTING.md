@@ -7,7 +7,7 @@ the project. For now, just talk to @mroth!
 
 ### Project Focus and Management
 
-This project is currently in an intial focus towards the end goal of restoring
+This project is currently in an initial focus towards the end goal of restoring
 basic functionality of the main Emojitracker.com site.
 
 -   A series of small, atomic changes, in order, towards the goal.
@@ -18,7 +18,7 @@ Project planning here: https://github.com/mroth/emojitrack-web-react/projects/1
 ### Design Goals
 
 -   Favor the simplest and most standard possible solution. The JavaScript
-    ecosystem changes far too rapidly, and we want somthing that can sustain
+    ecosystem changes far too rapidly, and we want something that can sustain
     itself as well as possible.
 
 ### Code of Conduct
